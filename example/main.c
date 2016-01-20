@@ -14,9 +14,24 @@ struct pair {
   char *pattern;
 };
 
+static void str_match_example(void);
+static void str_find_example(void);
+
 
 int
 main(void)
+{
+  printf("========== ========== =========\n");
+  str_match_example();
+  printf("========== ========== =========\n");
+  str_find_example();
+  printf("========== ========== =========\n");
+	return EXIT_SUCCESS;
+}
+
+
+static void
+str_match_example(void)
 {
   const struct pair pairs[] = {
     {"hello", "h"},
@@ -50,6 +65,30 @@ main(void)
     free(error_buf);
     str_match_free(&match);
   }
+}
 
-	return EXIT_SUCCESS;
+
+static void
+str_find_example(void)
+{
+  const char *string = "The quick brown fox jumps over the lazy dog";
+  
+  const char *patterns[] = {
+      "zy", "cat", "fox", "THE", NULL
+  };
+
+  struct str_find finder;
+  char *error_buf = malloc(LINE_MAX);
+
+  for (int i = 0; patterns[i] != NULL; i++) {
+    int rv = str_find(string, patterns[i], &finder, 1, &error_buf);
+
+    printf("string =    %s\n", string);
+    printf("pattern =   %s\n", patterns[i]);
+    printf("rv =        %d\n", rv);
+    printf("start,end = %d,%d\n", (int)finder.sm_so, (int)finder.sm_eo);
+    printf("-----\n");
+  }
+
+  free(error_buf);
 }
